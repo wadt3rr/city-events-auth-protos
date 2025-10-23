@@ -1,4 +1,4 @@
-module protos
+module github.com/wadt3rr/city-events-auth-protos
 
 go 1.24.0
 
