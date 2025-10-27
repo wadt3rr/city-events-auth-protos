@@ -13,14 +13,22 @@ service Auth {
 	rpc Register (RegisterRequest) returns (RegisterResponse);
 	// Login logs in a user and returns an auth token.
 	rpc Login (LoginRequest) returns (LoginResponse);
+  // AssignRole assigns role to user
+  rpc AssignRole (AssignRoleRequest) returns (AssignRoleResponse);
+  // GetUserRole get user current role
+  rpc GetUserRole (GetUserRoleRequest) returns (GetUserRoleResponse);
+  // ListUsers get list of users with their roles
+  rpc ListUsers (ListUsersRequest) returns (ListUsersResponse);
+
 }
 
 
-
+// AUTH
 // Объект, который отправляется при вызове RPC-метода (ручки) Register.
 message RegisterRequest {
 	string email = 1; // Email of the user to register.
 	string password = 2; // Password of the user to register.
+  string role = 3;
 }
 
 // Объект, который метод (ручка) вернёт.
@@ -39,45 +47,39 @@ message LoginResponse {
 	string token = 1; // Auth token of the logged in user.
 }
 
-service Permissions {
-	// Get list of permissions for a given user
-	rpc GetUserPermissions(GetUserPermissionsRequest) returns (GetUserPermissionsResponse);
 
-	// Assign role to user
-	rpc AssignRoleToUser(AssignRoleToUserRequest) returns (AssignRoleToUserResponse);
+// ROLE MANAGEMENT
 
-	// Remove role from user
-	rpc RemoveRoleFromUser(RemoveRoleFromUserRequest) returns (RemoveRoleFromUserResponse);
-
-	// List all available roles
-	rpc ListRoles(ListRolesRequest) returns (ListRolesResponse);
+message AssignRoleRequest {
+  int64 user_id = 1;
+  string role = 2;
 }
 
-message GetUserPermissionsRequest {
-	int64 user_id = 1;
+message AssignRoleResponse {
+  bool success = 1;
 }
 
-message GetUserPermissionsResponse {
-	repeated string permissions = 1;
-	repeated string roles = 2;
+message GetUserRoleRequest {
+  int64 user_id = 1;
 }
 
-message AssignRoleToUserRequest {
-	int64 user_id = 1;
-	string role = 2;
+message GetUserRoleResponse {
+  string role = 1;
 }
 
-message AssignRoleToUserResponse{}
+// USER LIST
 
-message RemoveRoleFromUserRequest {
-	int64 user_id = 1;
-	string role = 2;
+message ListUsersRequest  {
 }
 
-message RemoveRoleFromUserResponse {}
-
-message ListRolesRequest {}
-
-message ListRolesResponse {
-	repeated string roles = 1;
+message ListUsersResponse {
+  repeated User users = 1;
 }
+
+message User {
+  int64 id = 1;
+  string email = 2;
+  string role = 3;
+}
+
+

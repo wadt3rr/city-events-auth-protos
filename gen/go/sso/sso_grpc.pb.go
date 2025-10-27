@@ -23,8 +23,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Auth_Register_FullMethodName = "/auth.Auth/Register"
-	Auth_Login_FullMethodName    = "/auth.Auth/Login"
+	Auth_Register_FullMethodName    = "/auth.Auth/Register"
+	Auth_Login_FullMethodName       = "/auth.Auth/Login"
+	Auth_AssignRole_FullMethodName  = "/auth.Auth/AssignRole"
+	Auth_GetUserRole_FullMethodName = "/auth.Auth/GetUserRole"
+	Auth_ListUsers_FullMethodName   = "/auth.Auth/ListUsers"
 )
 
 // AuthClient is the client API for Auth service.
@@ -37,6 +40,12 @@ type AuthClient interface {
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 	// Login logs in a user and returns an auth token.
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	// AssignRole assigns role to user
+	AssignRole(ctx context.Context, in *AssignRoleRequest, opts ...grpc.CallOption) (*AssignRoleResponse, error)
+	// GetUserRole get user current role
+	GetUserRole(ctx context.Context, in *GetUserRoleRequest, opts ...grpc.CallOption) (*GetUserRoleResponse, error)
+	// ListUsers get list of users with their roles
+	ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersResponse, error)
 }
 
 type authClient struct {
@@ -67,6 +76,36 @@ func (c *authClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.C
 	return out, nil
 }
 
+func (c *authClient) AssignRole(ctx context.Context, in *AssignRoleRequest, opts ...grpc.CallOption) (*AssignRoleResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AssignRoleResponse)
+	err := c.cc.Invoke(ctx, Auth_AssignRole_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) GetUserRole(ctx context.Context, in *GetUserRoleRequest, opts ...grpc.CallOption) (*GetUserRoleResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserRoleResponse)
+	err := c.cc.Invoke(ctx, Auth_GetUserRole_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListUsersResponse)
+	err := c.cc.Invoke(ctx, Auth_ListUsers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServer is the server API for Auth service.
 // All implementations must embed UnimplementedAuthServer
 // for forward compatibility.
@@ -77,6 +116,12 @@ type AuthServer interface {
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
 	// Login logs in a user and returns an auth token.
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
+	// AssignRole assigns role to user
+	AssignRole(context.Context, *AssignRoleRequest) (*AssignRoleResponse, error)
+	// GetUserRole get user current role
+	GetUserRole(context.Context, *GetUserRoleRequest) (*GetUserRoleResponse, error)
+	// ListUsers get list of users with their roles
+	ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error)
 	mustEmbedUnimplementedAuthServer()
 }
 
@@ -92,6 +137,15 @@ func (UnimplementedAuthServer) Register(context.Context, *RegisterRequest) (*Reg
 }
 func (UnimplementedAuthServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedAuthServer) AssignRole(context.Context, *AssignRoleRequest) (*AssignRoleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AssignRole not implemented")
+}
+func (UnimplementedAuthServer) GetUserRole(context.Context, *GetUserRoleRequest) (*GetUserRoleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserRole not implemented")
+}
+func (UnimplementedAuthServer) ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListUsers not implemented")
 }
 func (UnimplementedAuthServer) mustEmbedUnimplementedAuthServer() {}
 func (UnimplementedAuthServer) testEmbeddedByValue()              {}
@@ -150,6 +204,60 @@ func _Auth_Login_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Auth_AssignRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AssignRoleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).AssignRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Auth_AssignRole_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).AssignRole(ctx, req.(*AssignRoleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Auth_GetUserRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserRoleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).GetUserRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Auth_GetUserRole_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).GetUserRole(ctx, req.(*GetUserRoleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Auth_ListUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListUsersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).ListUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Auth_ListUsers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).ListUsers(ctx, req.(*ListUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Auth_ServiceDesc is the grpc.ServiceDesc for Auth service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -165,229 +273,17 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "Login",
 			Handler:    _Auth_Login_Handler,
 		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "sso/sso.proto",
-}
-
-const (
-	Permissions_GetUserPermissions_FullMethodName = "/auth.Permissions/GetUserPermissions"
-	Permissions_AssignRoleToUser_FullMethodName   = "/auth.Permissions/AssignRoleToUser"
-	Permissions_RemoveRoleFromUser_FullMethodName = "/auth.Permissions/RemoveRoleFromUser"
-	Permissions_ListRoles_FullMethodName          = "/auth.Permissions/ListRoles"
-)
-
-// PermissionsClient is the client API for Permissions service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type PermissionsClient interface {
-	// Get list of permissions for a given user
-	GetUserPermissions(ctx context.Context, in *GetUserPermissionsRequest, opts ...grpc.CallOption) (*GetUserPermissionsResponse, error)
-	// Assign role to user
-	AssignRoleToUser(ctx context.Context, in *AssignRoleToUserRequest, opts ...grpc.CallOption) (*AssignRoleToUserResponse, error)
-	// Remove role from user
-	RemoveRoleFromUser(ctx context.Context, in *RemoveRoleFromUserRequest, opts ...grpc.CallOption) (*RemoveRoleFromUserResponse, error)
-	// List all available roles
-	ListRoles(ctx context.Context, in *ListRolesRequest, opts ...grpc.CallOption) (*ListRolesResponse, error)
-}
-
-type permissionsClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewPermissionsClient(cc grpc.ClientConnInterface) PermissionsClient {
-	return &permissionsClient{cc}
-}
-
-func (c *permissionsClient) GetUserPermissions(ctx context.Context, in *GetUserPermissionsRequest, opts ...grpc.CallOption) (*GetUserPermissionsResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetUserPermissionsResponse)
-	err := c.cc.Invoke(ctx, Permissions_GetUserPermissions_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *permissionsClient) AssignRoleToUser(ctx context.Context, in *AssignRoleToUserRequest, opts ...grpc.CallOption) (*AssignRoleToUserResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AssignRoleToUserResponse)
-	err := c.cc.Invoke(ctx, Permissions_AssignRoleToUser_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *permissionsClient) RemoveRoleFromUser(ctx context.Context, in *RemoveRoleFromUserRequest, opts ...grpc.CallOption) (*RemoveRoleFromUserResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(RemoveRoleFromUserResponse)
-	err := c.cc.Invoke(ctx, Permissions_RemoveRoleFromUser_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *permissionsClient) ListRoles(ctx context.Context, in *ListRolesRequest, opts ...grpc.CallOption) (*ListRolesResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListRolesResponse)
-	err := c.cc.Invoke(ctx, Permissions_ListRoles_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// PermissionsServer is the server API for Permissions service.
-// All implementations must embed UnimplementedPermissionsServer
-// for forward compatibility.
-type PermissionsServer interface {
-	// Get list of permissions for a given user
-	GetUserPermissions(context.Context, *GetUserPermissionsRequest) (*GetUserPermissionsResponse, error)
-	// Assign role to user
-	AssignRoleToUser(context.Context, *AssignRoleToUserRequest) (*AssignRoleToUserResponse, error)
-	// Remove role from user
-	RemoveRoleFromUser(context.Context, *RemoveRoleFromUserRequest) (*RemoveRoleFromUserResponse, error)
-	// List all available roles
-	ListRoles(context.Context, *ListRolesRequest) (*ListRolesResponse, error)
-	mustEmbedUnimplementedPermissionsServer()
-}
-
-// UnimplementedPermissionsServer must be embedded to have
-// forward compatible implementations.
-//
-// NOTE: this should be embedded by value instead of pointer to avoid a nil
-// pointer dereference when methods are called.
-type UnimplementedPermissionsServer struct{}
-
-func (UnimplementedPermissionsServer) GetUserPermissions(context.Context, *GetUserPermissionsRequest) (*GetUserPermissionsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUserPermissions not implemented")
-}
-func (UnimplementedPermissionsServer) AssignRoleToUser(context.Context, *AssignRoleToUserRequest) (*AssignRoleToUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AssignRoleToUser not implemented")
-}
-func (UnimplementedPermissionsServer) RemoveRoleFromUser(context.Context, *RemoveRoleFromUserRequest) (*RemoveRoleFromUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RemoveRoleFromUser not implemented")
-}
-func (UnimplementedPermissionsServer) ListRoles(context.Context, *ListRolesRequest) (*ListRolesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListRoles not implemented")
-}
-func (UnimplementedPermissionsServer) mustEmbedUnimplementedPermissionsServer() {}
-func (UnimplementedPermissionsServer) testEmbeddedByValue()                     {}
-
-// UnsafePermissionsServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to PermissionsServer will
-// result in compilation errors.
-type UnsafePermissionsServer interface {
-	mustEmbedUnimplementedPermissionsServer()
-}
-
-func RegisterPermissionsServer(s grpc.ServiceRegistrar, srv PermissionsServer) {
-	// If the following call pancis, it indicates UnimplementedPermissionsServer was
-	// embedded by pointer and is nil.  This will cause panics if an
-	// unimplemented method is ever invoked, so we test this at initialization
-	// time to prevent it from happening at runtime later due to I/O.
-	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
-		t.testEmbeddedByValue()
-	}
-	s.RegisterService(&Permissions_ServiceDesc, srv)
-}
-
-func _Permissions_GetUserPermissions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserPermissionsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PermissionsServer).GetUserPermissions(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Permissions_GetUserPermissions_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PermissionsServer).GetUserPermissions(ctx, req.(*GetUserPermissionsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Permissions_AssignRoleToUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AssignRoleToUserRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PermissionsServer).AssignRoleToUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Permissions_AssignRoleToUser_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PermissionsServer).AssignRoleToUser(ctx, req.(*AssignRoleToUserRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Permissions_RemoveRoleFromUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RemoveRoleFromUserRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PermissionsServer).RemoveRoleFromUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Permissions_RemoveRoleFromUser_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PermissionsServer).RemoveRoleFromUser(ctx, req.(*RemoveRoleFromUserRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Permissions_ListRoles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListRolesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PermissionsServer).ListRoles(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Permissions_ListRoles_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PermissionsServer).ListRoles(ctx, req.(*ListRolesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-// Permissions_ServiceDesc is the grpc.ServiceDesc for Permissions service.
-// It's only intended for direct use with grpc.RegisterService,
-// and not to be introspected or modified (even as a copy)
-var Permissions_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "auth.Permissions",
-	HandlerType: (*PermissionsServer)(nil),
-	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetUserPermissions",
-			Handler:    _Permissions_GetUserPermissions_Handler,
+			MethodName: "AssignRole",
+			Handler:    _Auth_AssignRole_Handler,
 		},
 		{
-			MethodName: "AssignRoleToUser",
-			Handler:    _Permissions_AssignRoleToUser_Handler,
+			MethodName: "GetUserRole",
+			Handler:    _Auth_GetUserRole_Handler,
 		},
 		{
-			MethodName: "RemoveRoleFromUser",
-			Handler:    _Permissions_RemoveRoleFromUser_Handler,
-		},
-		{
-			MethodName: "ListRoles",
-			Handler:    _Permissions_ListRoles_Handler,
+			MethodName: "ListUsers",
+			Handler:    _Auth_ListUsers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
