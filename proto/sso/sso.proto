@@ -14,14 +14,13 @@ service Auth {
 	// Login logs in a user and returns an auth token.
 	rpc Login (LoginRequest) returns (LoginResponse);
   // AssignRole assigns role to user
-  rpc AssignRole (AssignRoleRequest) returns (AssignRoleResponse);
+  rpc AssignRole (UpdateUserRoleRequest) returns (UpdateUserRoleResponse);
   // GetUserRole get user current role
   rpc GetUserRole (GetUserRoleRequest) returns (GetUserRoleResponse);
   // ListUsers get list of users with their roles
   rpc ListUsers (ListUsersRequest) returns (ListUsersResponse);
 
 }
-
 
 // AUTH
 // Объект, который отправляется при вызове RPC-метода (ручки) Register.
@@ -50,14 +49,13 @@ message LoginResponse {
 
 // ROLE MANAGEMENT
 
-message AssignRoleRequest {
+message UpdateUserRoleRequest {
   int64 user_id = 1;
   string role = 2;
 }
 
-message AssignRoleResponse {
-  bool success = 1;
-}
+message UpdateUserRoleResponse {}
+
 
 message GetUserRoleRequest {
   int64 user_id = 1;
