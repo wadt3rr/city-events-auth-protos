@@ -590,7 +590,7 @@ const file_sso_sso_proto_rawDesc = "" +
 	"\bRegister\x12\x15.auth.RegisterRequest\x1a\x16.auth.RegisterResponse\x120\n" +
 	"\x05Login\x12\x12.auth.LoginRequest\x1a\x13.auth.LoginResponse\x12G\n" +
 	"\n" +
-	"AssignRole\x12\x1b.auth.UpdateUserRoleRequest\x1a\x1c.auth.UpdateUserRoleResponse\x12B\n" +
+	"UpdateRole\x12\x1b.auth.UpdateUserRoleRequest\x1a\x1c.auth.UpdateUserRoleResponse\x12B\n" +
 	"\vGetUserRole\x12\x18.auth.GetUserRoleRequest\x1a\x19.auth.GetUserRoleResponse\x12<\n" +
 	"\tListUsers\x12\x16.auth.ListUsersRequest\x1a\x17.auth.ListUsersResponseB\x16Z\x14wadt3rr.sso.v1;ssov1b\x06proto3"
 
@@ -624,12 +624,12 @@ var file_sso_sso_proto_depIdxs = []int32{
 	10, // 0: auth.ListUsersResponse.users:type_name -> auth.User
 	0,  // 1: auth.Auth.Register:input_type -> auth.RegisterRequest
 	2,  // 2: auth.Auth.Login:input_type -> auth.LoginRequest
-	4,  // 3: auth.Auth.AssignRole:input_type -> auth.UpdateUserRoleRequest
+	4,  // 3: auth.Auth.UpdateRole:input_type -> auth.UpdateUserRoleRequest
 	6,  // 4: auth.Auth.GetUserRole:input_type -> auth.GetUserRoleRequest
 	8,  // 5: auth.Auth.ListUsers:input_type -> auth.ListUsersRequest
 	1,  // 6: auth.Auth.Register:output_type -> auth.RegisterResponse
 	3,  // 7: auth.Auth.Login:output_type -> auth.LoginResponse
-	5,  // 8: auth.Auth.AssignRole:output_type -> auth.UpdateUserRoleResponse
+	5,  // 8: auth.Auth.UpdateRole:output_type -> auth.UpdateUserRoleResponse
 	7,  // 9: auth.Auth.GetUserRole:output_type -> auth.GetUserRoleResponse
 	9,  // 10: auth.Auth.ListUsers:output_type -> auth.ListUsersResponse
 	6,  // [6:11] is the sub-list for method output_type

@@ -25,7 +25,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	Auth_Register_FullMethodName    = "/auth.Auth/Register"
 	Auth_Login_FullMethodName       = "/auth.Auth/Login"
-	Auth_AssignRole_FullMethodName  = "/auth.Auth/AssignRole"
+	Auth_UpdateRole_FullMethodName  = "/auth.Auth/UpdateRole"
 	Auth_GetUserRole_FullMethodName = "/auth.Auth/GetUserRole"
 	Auth_ListUsers_FullMethodName   = "/auth.Auth/ListUsers"
 )
@@ -41,7 +41,7 @@ type AuthClient interface {
 	// Login logs in a user and returns an auth token.
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	// AssignRole assigns role to user
-	AssignRole(ctx context.Context, in *UpdateUserRoleRequest, opts ...grpc.CallOption) (*UpdateUserRoleResponse, error)
+	UpdateRole(ctx context.Context, in *UpdateUserRoleRequest, opts ...grpc.CallOption) (*UpdateUserRoleResponse, error)
 	// GetUserRole get user current role
 	GetUserRole(ctx context.Context, in *GetUserRoleRequest, opts ...grpc.CallOption) (*GetUserRoleResponse, error)
 	// ListUsers get list of users with their roles
@@ -76,10 +76,10 @@ func (c *authClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.C
 	return out, nil
 }
 
-func (c *authClient) AssignRole(ctx context.Context, in *UpdateUserRoleRequest, opts ...grpc.CallOption) (*UpdateUserRoleResponse, error) {
+func (c *authClient) UpdateRole(ctx context.Context, in *UpdateUserRoleRequest, opts ...grpc.CallOption) (*UpdateUserRoleResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UpdateUserRoleResponse)
-	err := c.cc.Invoke(ctx, Auth_AssignRole_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Auth_UpdateRole_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +117,7 @@ type AuthServer interface {
 	// Login logs in a user and returns an auth token.
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	// AssignRole assigns role to user
-	AssignRole(context.Context, *UpdateUserRoleRequest) (*UpdateUserRoleResponse, error)
+	UpdateRole(context.Context, *UpdateUserRoleRequest) (*UpdateUserRoleResponse, error)
 	// GetUserRole get user current role
 	GetUserRole(context.Context, *GetUserRoleRequest) (*GetUserRoleResponse, error)
 	// ListUsers get list of users with their roles
@@ -138,8 +138,8 @@ func (UnimplementedAuthServer) Register(context.Context, *RegisterRequest) (*Reg
 func (UnimplementedAuthServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
-func (UnimplementedAuthServer) AssignRole(context.Context, *UpdateUserRoleRequest) (*UpdateUserRoleResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AssignRole not implemented")
+func (UnimplementedAuthServer) UpdateRole(context.Context, *UpdateUserRoleRequest) (*UpdateUserRoleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateRole not implemented")
 }
 func (UnimplementedAuthServer) GetUserRole(context.Context, *GetUserRoleRequest) (*GetUserRoleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserRole not implemented")
@@ -204,20 +204,20 @@ func _Auth_Login_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Auth_AssignRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Auth_UpdateRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateUserRoleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServer).AssignRole(ctx, in)
+		return srv.(AuthServer).UpdateRole(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Auth_AssignRole_FullMethodName,
+		FullMethod: Auth_UpdateRole_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).AssignRole(ctx, req.(*UpdateUserRoleRequest))
+		return srv.(AuthServer).UpdateRole(ctx, req.(*UpdateUserRoleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -274,8 +274,8 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Auth_Login_Handler,
 		},
 		{
-			MethodName: "AssignRole",
-			Handler:    _Auth_AssignRole_Handler,
+			MethodName: "UpdateRole",
+			Handler:    _Auth_UpdateRole_Handler,
 		},
 		{
 			MethodName: "GetUserRole",
