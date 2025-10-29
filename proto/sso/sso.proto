@@ -14,7 +14,7 @@ service Auth {
 	// Login logs in a user and returns an auth token.
 	rpc Login (LoginRequest) returns (LoginResponse);
   // AssignRole assigns role to user
-  rpc AssignRole (UpdateUserRoleRequest) returns (UpdateUserRoleResponse);
+  rpc UpdateRole (UpdateUserRoleRequest) returns (UpdateUserRoleResponse);
   // GetUserRole get user current role
   rpc GetUserRole (GetUserRoleRequest) returns (GetUserRoleResponse);
   // ListUsers get list of users with their roles
