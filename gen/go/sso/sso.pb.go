@@ -493,6 +493,94 @@ func (x *ListUsersResponse) GetUsers() []*User {
 	return nil
 }
 
+type GetUserRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserRequest) Reset() {
+	*x = GetUserRequest{}
+	mi := &file_sso_sso_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserRequest) ProtoMessage() {}
+
+func (x *GetUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_sso_sso_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserRequest.ProtoReflect.Descriptor instead.
+func (*GetUserRequest) Descriptor() ([]byte, []int) {
+	return file_sso_sso_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *GetUserRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type GetUserResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserResponse) Reset() {
+	*x = GetUserResponse{}
+	mi := &file_sso_sso_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserResponse) ProtoMessage() {}
+
+func (x *GetUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_sso_sso_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserResponse.ProtoReflect.Descriptor instead.
+func (*GetUserResponse) Descriptor() ([]byte, []int) {
+	return file_sso_sso_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *GetUserResponse) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
 type User struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -504,7 +592,7 @@ type User struct {
 
 func (x *User) Reset() {
 	*x = User{}
-	mi := &file_sso_sso_proto_msgTypes[10]
+	mi := &file_sso_sso_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -516,7 +604,7 @@ func (x *User) String() string {
 func (*User) ProtoMessage() {}
 
 func (x *User) ProtoReflect() protoreflect.Message {
-	mi := &file_sso_sso_proto_msgTypes[10]
+	mi := &file_sso_sso_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -529,7 +617,7 @@ func (x *User) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use User.ProtoReflect.Descriptor instead.
 func (*User) Descriptor() ([]byte, []int) {
-	return file_sso_sso_proto_rawDescGZIP(), []int{10}
+	return file_sso_sso_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *User) GetId() int64 {
@@ -581,18 +669,24 @@ const file_sso_sso_proto_rawDesc = "" +
 	"\x10ListUsersRequest\"5\n" +
 	"\x11ListUsersResponse\x12 \n" +
 	"\x05users\x18\x01 \x03(\v2\n" +
-	".auth.UserR\x05users\"@\n" +
+	".auth.UserR\x05users\" \n" +
+	"\x0eGetUserRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"1\n" +
+	"\x0fGetUserResponse\x12\x1e\n" +
+	"\x04user\x18\x01 \x01(\v2\n" +
+	".auth.UserR\x04user\"@\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x12\n" +
-	"\x04role\x18\x03 \x01(\tR\x04role2\xbe\x02\n" +
+	"\x04role\x18\x03 \x01(\tR\x04role2\xf6\x02\n" +
 	"\x04Auth\x129\n" +
 	"\bRegister\x12\x15.auth.RegisterRequest\x1a\x16.auth.RegisterResponse\x120\n" +
 	"\x05Login\x12\x12.auth.LoginRequest\x1a\x13.auth.LoginResponse\x12G\n" +
 	"\n" +
 	"UpdateRole\x12\x1b.auth.UpdateUserRoleRequest\x1a\x1c.auth.UpdateUserRoleResponse\x12B\n" +
 	"\vGetUserRole\x12\x18.auth.GetUserRoleRequest\x1a\x19.auth.GetUserRoleResponse\x12<\n" +
-	"\tListUsers\x12\x16.auth.ListUsersRequest\x1a\x17.auth.ListUsersResponseB\x16Z\x14wadt3rr.sso.v1;ssov1b\x06proto3"
+	"\tListUsers\x12\x16.auth.ListUsersRequest\x1a\x17.auth.ListUsersResponse\x126\n" +
+	"\aGetUser\x12\x14.auth.GetUserRequest\x1a\x15.auth.GetUserResponseB\x16Z\x14wadt3rr.sso.v1;ssov1b\x06proto3"
 
 var (
 	file_sso_sso_proto_rawDescOnce sync.Once
@@ -606,7 +700,7 @@ func file_sso_sso_proto_rawDescGZIP() []byte {
 	return file_sso_sso_proto_rawDescData
 }
 
-var file_sso_sso_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_sso_sso_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_sso_sso_proto_goTypes = []any{
 	(*RegisterRequest)(nil),        // 0: auth.RegisterRequest
 	(*RegisterResponse)(nil),       // 1: auth.RegisterResponse
@@ -618,25 +712,30 @@ var file_sso_sso_proto_goTypes = []any{
 	(*GetUserRoleResponse)(nil),    // 7: auth.GetUserRoleResponse
 	(*ListUsersRequest)(nil),       // 8: auth.ListUsersRequest
 	(*ListUsersResponse)(nil),      // 9: auth.ListUsersResponse
-	(*User)(nil),                   // 10: auth.User
+	(*GetUserRequest)(nil),         // 10: auth.GetUserRequest
+	(*GetUserResponse)(nil),        // 11: auth.GetUserResponse
+	(*User)(nil),                   // 12: auth.User
 }
 var file_sso_sso_proto_depIdxs = []int32{
-	10, // 0: auth.ListUsersResponse.users:type_name -> auth.User
-	0,  // 1: auth.Auth.Register:input_type -> auth.RegisterRequest
-	2,  // 2: auth.Auth.Login:input_type -> auth.LoginRequest
-	4,  // 3: auth.Auth.UpdateRole:input_type -> auth.UpdateUserRoleRequest
-	6,  // 4: auth.Auth.GetUserRole:input_type -> auth.GetUserRoleRequest
-	8,  // 5: auth.Auth.ListUsers:input_type -> auth.ListUsersRequest
-	1,  // 6: auth.Auth.Register:output_type -> auth.RegisterResponse
-	3,  // 7: auth.Auth.Login:output_type -> auth.LoginResponse
-	5,  // 8: auth.Auth.UpdateRole:output_type -> auth.UpdateUserRoleResponse
-	7,  // 9: auth.Auth.GetUserRole:output_type -> auth.GetUserRoleResponse
-	9,  // 10: auth.Auth.ListUsers:output_type -> auth.ListUsersResponse
-	6,  // [6:11] is the sub-list for method output_type
-	1,  // [1:6] is the sub-list for method input_type
-	1,  // [1:1] is the sub-list for extension type_name
-	1,  // [1:1] is the sub-list for extension extendee
-	0,  // [0:1] is the sub-list for field type_name
+	12, // 0: auth.ListUsersResponse.users:type_name -> auth.User
+	12, // 1: auth.GetUserResponse.user:type_name -> auth.User
+	0,  // 2: auth.Auth.Register:input_type -> auth.RegisterRequest
+	2,  // 3: auth.Auth.Login:input_type -> auth.LoginRequest
+	4,  // 4: auth.Auth.UpdateRole:input_type -> auth.UpdateUserRoleRequest
+	6,  // 5: auth.Auth.GetUserRole:input_type -> auth.GetUserRoleRequest
+	8,  // 6: auth.Auth.ListUsers:input_type -> auth.ListUsersRequest
+	10, // 7: auth.Auth.GetUser:input_type -> auth.GetUserRequest
+	1,  // 8: auth.Auth.Register:output_type -> auth.RegisterResponse
+	3,  // 9: auth.Auth.Login:output_type -> auth.LoginResponse
+	5,  // 10: auth.Auth.UpdateRole:output_type -> auth.UpdateUserRoleResponse
+	7,  // 11: auth.Auth.GetUserRole:output_type -> auth.GetUserRoleResponse
+	9,  // 12: auth.Auth.ListUsers:output_type -> auth.ListUsersResponse
+	11, // 13: auth.Auth.GetUser:output_type -> auth.GetUserResponse
+	8,  // [8:14] is the sub-list for method output_type
+	2,  // [2:8] is the sub-list for method input_type
+	2,  // [2:2] is the sub-list for extension type_name
+	2,  // [2:2] is the sub-list for extension extendee
+	0,  // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_sso_sso_proto_init() }
@@ -650,7 +749,7 @@ func file_sso_sso_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sso_sso_proto_rawDesc), len(file_sso_sso_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

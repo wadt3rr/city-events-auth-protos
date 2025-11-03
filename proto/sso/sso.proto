@@ -19,7 +19,8 @@ service Auth {
   rpc GetUserRole (GetUserRoleRequest) returns (GetUserRoleResponse);
   // ListUsers get list of users with their roles
   rpc ListUsers (ListUsersRequest) returns (ListUsersResponse);
-
+  // GetUser get user by id
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
 }
 
 // AUTH
@@ -72,6 +73,14 @@ message ListUsersRequest  {
 
 message ListUsersResponse {
   repeated User users = 1;
+}
+
+message GetUserRequest {
+  int64 id = 1;
+}
+
+message GetUserResponse {
+  User user = 1;
 }
 
 message User {

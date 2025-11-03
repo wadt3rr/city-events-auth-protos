@@ -28,6 +28,7 @@ const (
 	Auth_UpdateRole_FullMethodName  = "/auth.Auth/UpdateRole"
 	Auth_GetUserRole_FullMethodName = "/auth.Auth/GetUserRole"
 	Auth_ListUsers_FullMethodName   = "/auth.Auth/ListUsers"
+	Auth_GetUser_FullMethodName     = "/auth.Auth/GetUser"
 )
 
 // AuthClient is the client API for Auth service.
@@ -46,6 +47,8 @@ type AuthClient interface {
 	GetUserRole(ctx context.Context, in *GetUserRoleRequest, opts ...grpc.CallOption) (*GetUserRoleResponse, error)
 	// ListUsers get list of users with their roles
 	ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersResponse, error)
+	// GetUser get user by id
+	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
 }
 
 type authClient struct {
@@ -106,6 +109,16 @@ func (c *authClient) ListUsers(ctx context.Context, in *ListUsersRequest, opts .
 	return out, nil
 }
 
+func (c *authClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserResponse)
+	err := c.cc.Invoke(ctx, Auth_GetUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServer is the server API for Auth service.
 // All implementations must embed UnimplementedAuthServer
 // for forward compatibility.
@@ -122,6 +135,8 @@ type AuthServer interface {
 	GetUserRole(context.Context, *GetUserRoleRequest) (*GetUserRoleResponse, error)
 	// ListUsers get list of users with their roles
 	ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error)
+	// GetUser get user by id
+	GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error)
 	mustEmbedUnimplementedAuthServer()
 }
 
@@ -146,6 +161,9 @@ func (UnimplementedAuthServer) GetUserRole(context.Context, *GetUserRoleRequest)
 }
 func (UnimplementedAuthServer) ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListUsers not implemented")
+}
+func (UnimplementedAuthServer) GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
 func (UnimplementedAuthServer) mustEmbedUnimplementedAuthServer() {}
 func (UnimplementedAuthServer) testEmbeddedByValue()              {}
@@ -258,6 +276,24 @@ func _Auth_ListUsers_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Auth_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).GetUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Auth_GetUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).GetUser(ctx, req.(*GetUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Auth_ServiceDesc is the grpc.ServiceDesc for Auth service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -284,6 +320,10 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListUsers",
 			Handler:    _Auth_ListUsers_Handler,
+		},
+		{
+			MethodName: "GetUser",
+			Handler:    _Auth_GetUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
